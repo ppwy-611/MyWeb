@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#6155a4">
+  <title>眠序｜睡眠体验评估课程原型</title>
+  <meta name="description" content="眠序是睡眠体验评估课程原型，支持部分睡眠指标输入、模型贡献解释与模拟调整，可使用示例数据体验。">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/styles.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#sleep-form">跳到睡眠指标输入</a>
+  <header class="site-header">
+    <a class="brand" href="/" aria-label="眠序首页"><img src="/favicon.svg" width="38" height="38" alt=""><span>眠序<small>SLEEP NOTES</small></span></a>
+    <nav aria-label="页面导航"><a href="#input-panel">记录昨夜</a><a href="#result-panel">理解结果</a><button type="button" id="about-button">关于评估 <span aria-hidden="true">↗</span></button></nav>
+    <button class="connection" id="connection" type="button" title="检查评估服务连接"><span class="status-dot" aria-hidden="true"></span><span id="connection-text">正在连接</span></button>
+  </header>
+  <main>
+    <section class="hero" aria-labelledby="page-title">
+      <div class="hero-copy"><div class="eyebrow"><span aria-hidden="true">✦</span> 昨夜的记录，今天的理解</div><h1 id="page-title">把昨夜，读得<span>更清楚。</span></h1><p>填入你知道的睡眠指标，得到一份有依据的体验评估。<br class="desktop-break">不必填满所有数字，也可以从三项开始。</p><button class="text-button" type="button" id="hero-example">先用示例体验 <span aria-hidden="true">→</span></button></div>
+      <div class="night-art" aria-hidden="true"><svg viewBox="0 0 360 210" fill="none"><defs><linearGradient id="night" x1="60" y1="20" x2="320" y2="220" gradientUnits="userSpaceOnUse"><stop stop-color="#d9d2ef"/><stop offset="1" stop-color="#f0eaf5"/></linearGradient></defs><ellipse cx="202" cy="125" rx="129" ry="72" fill="url(#night)"/><path d="M66 150c70-37 139-37 232 0M47 173c82-43 175-40 269-4" stroke="#c1b8dc" stroke-width="1.4"/><path d="M233 113c-28-3-47-27-43-56-28 6-43 36-34 61 11 31 49 39 77 14 6-6 9-13 12-20-4 1-8 1-12 1Z" fill="#fcf8ed"/><path d="m268 55 3 10 10 3-10 3-3 10-3-10-10-3 10-3 3-10ZM125 82l2 6 6 2-6 2-2 6-2-6-6-2 6-2 2-6Z" fill="#998bbb"/><circle cx="296" cy="110" r="2.5" fill="#998bbb"/><circle cx="109" cy="128" r="2" fill="#998bbb"/><circle cx="223" cy="35" r="2" fill="#998bbb"/><path d="M139 177c12-9 24-11 36-5 14 7 32 7 48-4" stroke="#887ca8" stroke-width="2" stroke-linecap="round"/></svg><span class="art-caption">ONE NIGHT. A LITTLE MORE CLARITY.</span></div>
+    </section>
+
+    <div class="workspace">
+      <section class="panel input-panel" id="input-panel" aria-labelledby="input-title">
+        <div class="panel-heading"><div><span class="section-kicker">01 / 记录</span><h2 id="input-title">昨夜的睡眠指标</h2></div><span class="count-pill" id="input-count">0 / 7 项</span></div>
+        <div class="input-progress" aria-hidden="true"><span id="input-progress"></span></div>
+        <p class="helper">填写能获取的数值，未知指标留空。<b>留空与 0 的含义不同。</b></p>
+        <div class="presets" role="group" aria-label="填入示例数据"><span>试一试</span><button type="button" data-preset="three">三项示例</button><button type="button" data-preset="four">四项示例</button><button type="button" data-preset="full">完整示例</button></div>
+        <p class="example-note" id="example-note" hidden>当前填写的是示例数据，可修改体验；请清空后填写你的真实记录。</p>
+        <div class="mode-switch" role="group" aria-label="评估模式"><button type="button" id="record-mode" aria-pressed="true">记录评估</button><button type="button" id="simulation-mode" aria-pressed="false" disabled title="先完成一次记录评估">模拟调整 <span aria-hidden="true">↗</span></button></div>
+        <p class="simulation-note" id="simulation-note" hidden>模拟以最近一次记录为参考。改变输入只展示模型关系，不代表现实改善。</p>
+        <form id="sleep-form" novalidate>
+          <div class="fields">
+            <div class="field"><label for="tst">总睡眠时长 <span class="field-symbol" aria-hidden="true">☾</span></label><div class="number-wrap"><input id="tst" name="tst" type="number" min="0" step="any" inputmode="decimal" placeholder="例如 420" aria-describedby="tst-help tst-error"><span>分钟</span></div><small id="tst-help">实际睡着的累计时长，不含清醒时间。</small><span class="field-error" id="tst-error" hidden></span></div>
+            <div class="field"><label for="sol">入睡耗时</label><div class="number-wrap"><input id="sol" name="sol" type="number" min="0" step="any" inputmode="decimal" placeholder="例如 20" aria-describedby="sol-help sol-error"><span>分钟</span></div><small id="sol-help">从尝试入睡到睡着；0 表示几乎立即入睡。</small><span class="field-error" id="sol-error" hidden></span></div>
+            <div class="field"><label for="waso">夜间清醒时长</label><div class="number-wrap"><input id="waso" name="waso" type="number" min="0" step="any" inputmode="decimal" placeholder="例如 35" aria-describedby="waso-help waso-error"><span>分钟</span></div><small id="waso-help">入睡后清醒时段的累计时间，不是次数。</small><span class="field-error" id="waso-error" hidden></span></div>
+            <div class="field"><label for="sleep_efficiency">睡眠效率</label><div class="number-wrap"><input id="sleep_efficiency" name="sleep_efficiency" type="number" min="0" max="100" step="any" inputmode="decimal" placeholder="例如 88" aria-describedby="sleep_efficiency-help sleep_efficiency-error"><span>%</span></div><small id="sleep_efficiency-help">睡眠时长 ÷ 卧床时长 × 100，未知可留空。</small><span class="field-error" id="sleep_efficiency-error" hidden></span></div>
+          </div>
+          <details class="advanced" id="advanced"><summary><span>更多指标 <small>深睡、REM 与深睡潜伏期</small></span><span class="advanced-count" id="advanced-count">可选 +3</span></summary><div class="fields advanced-fields">
+            <div class="field"><label for="n3_percentage">深睡占比</label><div class="number-wrap"><input id="n3_percentage" name="n3_percentage" type="number" min="0" max="100" step="any" inputmode="decimal" placeholder="例如 18" aria-describedby="n3_percentage-help n3_percentage-error"><span>%</span></div><small id="n3_percentage-help">设备报告中的 N3 深睡比例。</small><span class="field-error" id="n3_percentage-error" hidden></span></div>
+            <div class="field"><label for="rem_percentage">REM 占比</label><div class="number-wrap"><input id="rem_percentage" name="rem_percentage" type="number" min="0" max="100" step="any" inputmode="decimal" placeholder="例如 22" aria-describedby="rem_percentage-help rem_percentage-error"><span>%</span></div><small id="rem_percentage-help">快速眼动睡眠占总睡眠的比例。</small><span class="field-error" id="rem_percentage-error" hidden></span></div>
+            <div class="field full-field"><label for="n3_latency_aasm">深睡潜伏期</label><div class="number-wrap"><input id="n3_latency_aasm" name="n3_latency_aasm" type="number" min="0" step="any" inputmode="decimal" placeholder="例如 25" aria-describedby="n3_latency_aasm-help n3_latency_aasm-error"><span>分钟</span></div><small id="n3_latency_aasm-help">请按设备报告填写；不同设备定义可能不同。</small><span class="field-error" id="n3_latency_aasm-error" hidden></span></div>
+          </div></details>
+          <div class="form-error" id="form-error" role="alert" tabindex="-1" hidden></div>
+          <button class="primary-button" id="evaluate-button" type="submit"><span id="evaluate-label">生成睡眠评估</span><span class="button-arrow" aria-hidden="true">→</span></button>
+          <div class="form-bottom"><span id="fill-note">至少填写一项；三至四项可提供更多信息。</span><button type="button" class="text-button subdued" id="clear-button">清空记录</button></div>
+        </form>
+        <div class="privacy-note"><svg width="15" height="15" viewBox="0 0 20 20" fill="none" aria-hidden="true"><rect x="4" y="8" width="12" height="9" rx="2" stroke="currentColor"/><path d="M7 8V5a3 3 0 0 1 6 0v3" stroke="currentColor"/></svg><span>输入发送到运行本网站的服务进行评估；刷新页面即清除页面记录。</span></div>
+      </section>
+
+      <section class="results-column" id="result-panel" aria-labelledby="result-title">
+        <div class="result-heading"><div><span class="section-kicker">02 / 理解</span><h2 id="result-title" tabindex="-1">你的睡眠体验评估</h2></div><span id="result-badge" class="muted-badge">等待记录</span></div>
+        <p class="stale-note" id="stale-note" role="status" hidden>输入已修改。当前结果来自上一次评估，请重新生成。</p>
+        <div id="empty-state" class="panel empty-state"><div class="empty-moon" aria-hidden="true">☾</div><h3>从你知道的数字开始</h3><p>填写左侧指标，或选择一组示例。<br>这里会展示分数、影响因素和分析报告。</p><div class="empty-steps"><span><i>1</i> 记录指标</span><span><i>2</i> 理解原因</span><span><i>3</i> 补充与比较</span></div><button type="button" class="secondary-button" id="empty-example">用四项示例体验</button><small>页面等级仅用于体验展示，项目结果不用于医疗诊断。</small></div>
+        <div id="result-content" hidden>
+          <article class="panel score-panel" aria-labelledby="score-title">
+            <div class="score-main"><div class="score-ring"><svg viewBox="0 0 180 180" aria-hidden="true"><circle class="ring-track" cx="90" cy="90" r="76"/><circle class="ring-value" id="score-arc" cx="90" cy="90" r="76"/></svg><div class="score-number"><strong id="score-value">—</strong><span>/ 100</span></div></div><div class="score-copy"><span class="section-kicker" id="score-title">睡眠体验指数</span><div class="grade-row"><h3 id="grade">—</h3><span class="grade-dot" aria-hidden="true"></span></div><p id="score-summary"></p><button class="text-button subdued" type="button" id="score-help-button">这个分数如何得到？ <span aria-hidden="true">↗</span></button></div></div>
+            <div class="score-scale" aria-hidden="true"><span class="poor-band"></span><span class="average-band"></span><span class="comfortable-band"></span><i id="scale-marker"></i></div><div class="scale-labels"><span>较差 <small>0–不足60</small></span><span>一般 <small>60–不足80</small></span><span>舒适 <small>80–100</small></span></div>
+            <div class="comparison" id="comparison" hidden><div><span id="comparison-title">与上次记录相比</span><strong id="comparison-delta"></strong></div><p id="comparison-detail"></p></div>
+            <div class="result-footnote"><span id="evaluated-time"></span><span>展示指数，不代表准确率</span></div>
+          </article>
+
+          <article class="panel completeness-panel"><div class="compact-heading"><h3>这次评估用了什么？</h3><span class="count-pill" id="result-input-count"></span></div><div id="used-chips" class="result-chips"></div><p id="missing-note" class="muted"></p><p id="limited-note" class="limited-note" hidden>当前只有一项或两项指标，个体信息有限，可补充后再评估。</p><details class="evidence-details"><summary>查看该输入组合的历史评估误差</summary><p id="evidence-text"></p><p class="muted">这是研究数据中同一输入组合的群体误差，不是本条预测的置信区间。真实设备或自报数据的效果仍需验证。</p></details></article>
+
+          <article class="panel factors-panel" aria-labelledby="factors-title"><div class="compact-heading"><h3 id="factors-title">哪些指标影响了这次估计？</h3><span class="outline-badge">真实模型贡献</span></div><p class="muted small">相对于训练数据的典型输入，绿色表示上调体验指数，橙色表示下调。这里只分析你实际提供的指标。</p><div id="factor-list"></div><p class="factor-note" id="factor-note">贡献表示模型中的关联，不说明某个指标造成了睡眠好坏。</p></article>
+
+          <article class="panel report-panel" id="analysis-panel" aria-labelledby="report-title"><div class="compact-heading"><div><span class="section-kicker">03 / 分析</span><h3 id="report-title">给这一晚的一句话</h3></div><button class="copy-button" id="copy-report" type="button">复制报告</button></div><div class="report-body"><p class="report-summary" id="report-summary"></p><details class="report-evidence"><summary>展开分析依据</summary><div id="report-drivers"></div></details><div class="report-next"><h4>接下来可以做什么</h4><ul id="next-steps"></ul></div></div><div class="report-footer"><span>基于本地模型贡献生成 · 相对训练典型记录</span><span id="copy-status" role="status"></span></div></article>
+        </div>
+      </section>
+    </div>
+    <footer class="page-footer"><div class="footer-brand">眠序 <span>让记录有反馈，让结果可理解。</span></div><p>人机交互课程原型 · 分数及等级是模型估计的展示方式，结果仅用于课程学习。</p><button class="text-button subdued" type="button" id="footer-about">查看方法与适用范围 ↗</button></footer>
+  </main>
+  <dialog id="about-dialog" aria-labelledby="about-title"><div class="dialog-heading"><span class="section-kicker">方法与适用范围</span><button type="button" id="close-dialog" aria-label="关闭说明">×</button></div><h2 id="about-title">分数从哪里来？</h2><p>页面连接当前七项 Ridge 回归模型，估计次晨 Groningen 睡眠质量总分（0–14，越高表示主观睡眠问题越多），再转换成更直观的体验指数。</p><div class="formula">体验指数 = 100 × (14 − 模型估计分数) ÷ 14</div><p>展示限制在 0–100 并保留一位小数；等级按页面显示的分数划分：80 分起为“舒适”，60 分起为“一般”，低于 60 为“较差”。这是原型展示规则，未经临床或等级数据验证。模型原始连续预测不截断。</p><h3>少填几项也能评估</h3><p>未提供的字段使用训练时保存的中位数填补。部分三项、四项组合接近完整输入，但任意组合不一定都有相同效果。完整七项的历史分组评估 MAE 约 2.49 分、RMSE 约 3.06 分（GSQS 尺度），高分段仍可能低估。</p><h3>分析报告如何生成</h3><p>报告根据 Ridge 对各输入的实际贡献与本地文字规则生成。参考输入为全部指标取训练中位数；缺失项不会被当作你的实测值进行解释。贡献反映模型中的关联，不等于因果或医学判断。第一版未调用大语言模型。</p><h3>数据与现实输入的区别</h3><p>模型训练数据来自 BSETS 研究中的客观睡眠测量。设备或自报数据的误差、单位与字段定义可能不同，现有表现不能直接保证日常应用效果；时间单位沿用项目目前按分钟理解的假设。</p><div class="dialog-facts" id="raw-result" hidden></div><p class="muted small">输入发送到运行本网站的服务中处理；应用不主动保存评估输入，页面记录只保存在本次打开期间。托管平台可能记录访问日志。模拟调整只展示模型输出变化。研究数据来源：BSETS，Zenodo 记录 10657021。</p><button type="button" class="primary-button" id="understood-button">我了解了</button></dialog>
+  <noscript><div class="noscript-note">请启用 JavaScript，并通过网站服务打开此页面，才能使用模型评估。</div></noscript>
+</body>
+</html>

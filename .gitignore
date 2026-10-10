@@ -1,0 +1,5 @@
+code/.venv/
+code/.vscode/
+**/__pycache__/
+*.pyc
+code/predictions.csv
